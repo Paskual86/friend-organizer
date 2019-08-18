@@ -1,7 +1,6 @@
 ﻿using FriendOrganizer.DataAccess;
 using FriendOrganizer.Model;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
 
@@ -11,6 +10,10 @@ namespace FriendOrganizer.UI.Data
     {
         private readonly Func<FriendOrganizerDbContext> _contextCreator;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cc"></param>
         public FriendDataService(Func<FriendOrganizerDbContext> cc)
         {
             _contextCreator = cc;
@@ -20,15 +23,11 @@ namespace FriendOrganizer.UI.Data
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Friend>> GetAllAsync()
+        public async Task<Friend> GetByIdAsync(int AFriendId)
         {
             using (var ctx = _contextCreator())
             {
-                /*var r = await ctx.Friends.AsNoTracking().ToListAsync();
-                await Task.Delay(5000);
-                return r;*/
-
-                return await ctx.Friends.AsNoTracking().ToListAsync();
+                return await ctx.Friends.AsNoTracking().SingleAsync(f => f.Id == AFriendId);
             }
 
         }
