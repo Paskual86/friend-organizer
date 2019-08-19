@@ -31,5 +31,20 @@ namespace FriendOrganizer.UI.Data
             }
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="AValue"></param>
+        /// <returns></returns>
+        public async Task SaveAsync(Friend AValue)
+        {
+            using (var ctx = _contextCreator())
+            {
+                ctx.Friends.Attach(AValue);
+                ctx.Entry(AValue).State = EntityState.Modified;
+                await ctx.SaveChangesAsync();
+            }
+        }
     }
 }

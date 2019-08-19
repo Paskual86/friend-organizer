@@ -1,9 +1,10 @@
 ﻿using FriendOrganizer.Model;
 using FriendOrganizer.UI.Data;
 using FriendOrganizer.UI.Event;
+using Prism.Commands;
 using Prism.Events;
-using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -12,6 +13,7 @@ namespace FriendOrganizer.UI.ViewModel
         private readonly IFriendDataService _friendDataService;
         private readonly IEventAggregator _eventAgregator;
 
+        public ICommand SaveCommand { get; }
         /// <summary>
         /// 
         /// </summary>
@@ -22,7 +24,29 @@ namespace FriendOrganizer.UI.ViewModel
             _friendDataService = fds;
             _eventAgregator = ea;
             _eventAgregator.GetEvent<OpenFriendDetailViewEvent>().Subscribe(OnOpenFriendDetailViewEvent);
+            // Geenrate Event
+            SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private bool OnSaveCanExecute()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private async void OnSaveExecute()
+        {
+            await _friendDataService.SaveAsync(Friend);
+            _eventAgregator.GetEvent<AfterFriendSaveEvent>().Publish(new AfterFriendSaveEventArgs { Id = Friend.Id, DisplayMember = $"{Friend.FirstName} {Friend.LastName}" });
+        }
+
+
 
         /// <summary>
         /// 
@@ -44,6 +68,8 @@ namespace FriendOrganizer.UI.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        
 
         /// <summary>
         /// 
