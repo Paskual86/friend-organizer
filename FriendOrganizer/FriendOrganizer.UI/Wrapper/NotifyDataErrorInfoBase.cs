@@ -32,6 +32,7 @@ namespace FriendOrganizer.UI.Wrapper
         private void OnErrorChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+            base.OnPropertyChanged(nameof(HasErrors));
         }
 
         /// <summary>

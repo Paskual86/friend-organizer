@@ -48,6 +48,14 @@ namespace FriendOrganizer.UI.ViewModel
         {
             var friend = await _friendDataService.GetByIdAsync(AFriendId);
             Friend = new FriendWrapper(friend);
+            Friend.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Friend.HasErrors))
+                {
+                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+                }
+            };
+            ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
         }
 
         /// <summary>
@@ -56,7 +64,7 @@ namespace FriendOrganizer.UI.ViewModel
         /// <returns></returns>
         private bool OnSaveCanExecute()
         {
-            return true;
+            return Friend!=null && !Friend.HasErrors;
         }
 
         /// <summary>
