@@ -16,5 +16,11 @@ namespace FriendOrganizer.UI
             var main = container.Resolve<MainWindow>();
             main.Show();
         }
+
+        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show($"There was an error. Plase contact to the Admin. Error: {e.Exception.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            e.Handled = true;
+        }
     }
 }
