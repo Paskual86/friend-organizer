@@ -1,8 +1,8 @@
 ﻿using FriendOrganizer.UI.Event;
+using FriendOrganizer.UI.View.Services;
 using Prism.Events;
 using System;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -13,6 +13,7 @@ namespace FriendOrganizer.UI.ViewModel
         public INavigationViewModel NavigationViewModel { get; }
 
         private readonly Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
+        private readonly IMessageDialogService _messageDialogService;
 
         public IFriendDetailViewModel FriendDetailViewModel
         {
@@ -26,12 +27,14 @@ namespace FriendOrganizer.UI.ViewModel
 
         public MainViewModel(INavigationViewModel ANavigationViewModel, 
                             Func<IFriendDetailViewModel> AFriendDetailViewModel, 
-                            IEventAggregator eventAggregator)
+                            IEventAggregator eventAggregator,
+                            IMessageDialogService mds)
         {
             _eventAggregator = eventAggregator;
             NavigationViewModel = ANavigationViewModel;
             _friendDetailViewModelCreator = AFriendDetailViewModel;
             _eventAggregator.GetEvent<OpenFriendDetailViewEvent>().Subscribe(OnOpenFriendDetailViewEvent);
+            _messageDialogService = mds;
         }
 
         /// <summary>
@@ -42,8 +45,8 @@ namespace FriendOrganizer.UI.ViewModel
         {
             if (FriendDetailViewModel != null && FriendDetailViewModel.HasChanges)
             {
-                var result = MessageBox.Show("You've made changes. Navigate away?", "Question?", MessageBoxButton.OKCancel);
-                if (result == MessageBoxResult.Cancel)
+                var result = _messageDialogService.ShowOkCancelDialog("You've made changes. Navigate away?", "Question?");
+                if (result == MessageDialogResult.Cancel)
                 {
                     return;
                 }

@@ -60,7 +60,7 @@ namespace FriendOrganizer.UI.ViewModel
         {
             var lookup = await _lookupDataService.GetFriendLookupAsync();
             Friends.Clear();
-            foreach (var item in lookup) Friends.Add(new NavigationItemViewModel(item.Id, item.DisplayMember));
+            foreach (var item in lookup) Friends.Add(new NavigationItemViewModel(item.Id, item.DisplayMember, _eventAgregator));
         }
     }
 }
