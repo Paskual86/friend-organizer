@@ -30,6 +30,8 @@ namespace FriendOrganizer.UI.ViewModel
             }
         }
 
+        
+
         /// <summary>
         /// 
         /// </summary>
@@ -40,6 +42,20 @@ namespace FriendOrganizer.UI.ViewModel
             _lookupDataService = ALookupDataService;
             _eventAgregator = ea;
             _eventAgregator.GetEvent<AfterFriendSaveEvent>().Subscribe(OnAfterFriendSaved);
+            _eventAgregator.GetEvent<AfterFriendDeleteEvent>().Subscribe(OnAfterFriendDeleted);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="friendId"></param>
+        private void OnAfterFriendDeleted(int friendId)
+        {
+            var friend = Friends.SingleOrDefault(f => f.Id == friendId);
+            if (friend != null)
+            {
+                Friends.Remove(friend);
+            }
         }
 
         /// <summary>
@@ -48,8 +64,14 @@ namespace FriendOrganizer.UI.ViewModel
         /// <param name="obj"></param>
         private void OnAfterFriendSaved(AfterFriendSaveEventArgs obj)
         {
-            var lookItem = Friends.Single(l => l.Id == obj.Id);
-            lookItem.DisplayMember = obj.DisplayMember;
+            var lookItem = Friends.SingleOrDefault(l => l.Id == obj.Id);
+            if (lookItem == null)
+            {
+                Friends.Add(new NavigationItemViewModel(obj.Id, obj.DisplayMember, _eventAgregator));
+            }else
+            {
+                lookItem.DisplayMember = obj.DisplayMember;
+            }
         }
 
         /// <summary>

@@ -73,6 +73,7 @@
     </ApplicationDefinition>
     <Compile Include="Data\Lookups\ILookupDataService.cs" />
     <Compile Include="Data\Lookups\LookupDataService.cs" />
+    <Compile Include="Event\AfterFriendDeleteEvent.cs" />
     <Compile Include="Event\AfterFriendSaveEvent.cs" />
     <Compile Include="Event\AfterFriendSaveEventArgs.cs" />
     <Compile Include="Event\OpenFriendDetailViewEvent.cs" />

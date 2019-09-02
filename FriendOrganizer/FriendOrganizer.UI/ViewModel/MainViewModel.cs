@@ -1,8 +1,10 @@
 ﻿using FriendOrganizer.UI.Event;
 using FriendOrganizer.UI.View.Services;
+using Prism.Commands;
 using Prism.Events;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -15,6 +17,7 @@ namespace FriendOrganizer.UI.ViewModel
         private readonly Func<IFriendDetailViewModel> _friendDetailViewModelCreator;
         private readonly IMessageDialogService _messageDialogService;
 
+        public ICommand CreateNewFriendCommand { get; }
         public IFriendDetailViewModel FriendDetailViewModel
         {
             get { return _friendDetailViewModel; }
@@ -31,17 +34,39 @@ namespace FriendOrganizer.UI.ViewModel
                             IMessageDialogService mds)
         {
             _eventAggregator = eventAggregator;
-            NavigationViewModel = ANavigationViewModel;
             _friendDetailViewModelCreator = AFriendDetailViewModel;
-            _eventAggregator.GetEvent<OpenFriendDetailViewEvent>().Subscribe(OnOpenFriendDetailViewEvent);
             _messageDialogService = mds;
+
+            _eventAggregator.GetEvent<OpenFriendDetailViewEvent>().Subscribe(OnOpenFriendDetailViewEvent);
+            _eventAggregator.GetEvent<AfterFriendDeleteEvent>().Subscribe(OnAfterFriendDeleteEvent);
+
+            CreateNewFriendCommand = new DelegateCommand(OnCreateNewFriendExecute);
+
+            NavigationViewModel = ANavigationViewModel;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        private void OnAfterFriendDeleteEvent(int friendId)
+        {
+            FriendDetailViewModel = null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void OnCreateNewFriendExecute()
+        {
+            OnOpenFriendDetailViewEvent(null);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="AFriendId"></param>
-        private async void OnOpenFriendDetailViewEvent(int AFriendId)
+        private async void OnOpenFriendDetailViewEvent(int? AFriendId = null)
         {
             if (FriendDetailViewModel != null && FriendDetailViewModel.HasChanges)
             {
