@@ -11,7 +11,7 @@ namespace FriendOrganizer.UI.ViewModel
     {
         public ObservableCollection<NavigationItemViewModel> Friends { get; }
 
-        private readonly ILookupDataService _lookupDataService;
+        private readonly ILookupDataServiceFriend _lookupDataService;
         private readonly IEventAggregator _eventAgregator;
 
         private NavigationItemViewModel _selectedFriend;
@@ -36,7 +36,7 @@ namespace FriendOrganizer.UI.ViewModel
         /// 
         /// </summary>
         /// <param name="ALookupDataService"></param>
-        public NavigationViewModel(ILookupDataService ALookupDataService, IEventAggregator ea)
+        public NavigationViewModel(ILookupDataServiceFriend ALookupDataService, IEventAggregator ea)
         {
             Friends = new ObservableCollection<NavigationItemViewModel>();
             _lookupDataService = ALookupDataService;

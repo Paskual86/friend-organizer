@@ -53,6 +53,14 @@
     <Compile Include="Migrations\201908180120562_Initial Database.Designer.cs">
       <DependentUpon>201908180120562_Initial Database.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909081315475_AddedProgrammingLanguage.cs" />
+    <Compile Include="Migrations\201909081315475_AddedProgrammingLanguage.Designer.cs">
+      <DependentUpon>201909081315475_AddedProgrammingLanguage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909081318478_AddedPrgrammingLanguage1.cs" />
+    <Compile Include="Migrations\201909081318478_AddedPrgrammingLanguage1.Designer.cs">
+      <DependentUpon>201909081318478_AddedPrgrammingLanguage1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +77,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201908180120562_Initial Database.resx">
       <DependentUpon>201908180120562_Initial Database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909081315475_AddedProgrammingLanguage.resx">
+      <DependentUpon>201909081315475_AddedProgrammingLanguage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909081318478_AddedPrgrammingLanguage1.resx">
+      <DependentUpon>201909081318478_AddedPrgrammingLanguage1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

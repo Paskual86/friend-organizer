@@ -71,7 +71,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\Lookups\ILookupDataService.cs" />
+    <Compile Include="Data\Lookups\ILookupDataServiceFriend.cs" />
+    <Compile Include="Data\Lookups\IProgrammingLanguageLookupDataService.cs" />
     <Compile Include="Data\Lookups\LookupDataService.cs" />
     <Compile Include="Event\AfterFriendDeleteEvent.cs" />
     <Compile Include="Event\AfterFriendSaveEvent.cs" />
