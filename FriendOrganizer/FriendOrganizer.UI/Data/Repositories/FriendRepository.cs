@@ -33,7 +33,9 @@ namespace FriendOrganizer.UI.Data.Repositories
         /// <returns></returns>
         public async Task<Friend> GetByIdAsync(int AFriendId)
         {
-            return await _context.Friends.SingleAsync(f => f.Id == AFriendId);
+            return await _context.Friends
+                .Include(f => f.PhoneNumbers)
+                .SingleAsync(f => f.Id == AFriendId);
         }
 
         /// <summary>
@@ -45,9 +47,22 @@ namespace FriendOrganizer.UI.Data.Repositories
             return _context.ChangeTracker.HasChanges();
         }
 
+        /// <summary>
+        /// Removes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
         public void Remove(Friend model)
         {
             _context.Friends.Remove(model);
+        }
+
+        /// <summary>
+        /// Removes the phone number.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        public void RemovePhoneNumber(FriendPhoneNumber model)
+        {
+            _context.FriendPhoneNumbers.Remove(model);
         }
 
         /// <summary>
