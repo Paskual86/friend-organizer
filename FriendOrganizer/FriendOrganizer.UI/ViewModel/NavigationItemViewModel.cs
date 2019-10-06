@@ -10,6 +10,7 @@ namespace FriendOrganizer.UI.ViewModel
         public int Id { get; }
         private string _displayMember;
         private readonly IEventAggregator _eventAgregator;
+        private readonly string _detailViewModelName;
 
         public string DisplayMember
         {
@@ -21,27 +22,34 @@ namespace FriendOrganizer.UI.ViewModel
             }
         }
 
-        public ICommand OpenFriendDetailViewCommand { get; }
+        public ICommand OpenDetailViewCommand { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="AId"></param>
         /// <param name="ADisplayMember"></param>
-        public NavigationItemViewModel(int AId, string ADisplayMember, IEventAggregator ea)
+        public NavigationItemViewModel(int AId, string ADisplayMember, string detailViewModelName, IEventAggregator ea)
         {
             Id = AId;
             _displayMember = ADisplayMember;
             _eventAgregator = ea;
-            OpenFriendDetailViewCommand = new DelegateCommand(OnOpenFriendDetailView);
+            _detailViewModelName = detailViewModelName;
+            OpenDetailViewCommand = new DelegateCommand(OnOpenDetailViewExecute);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        private void OnOpenFriendDetailView()
+        private void OnOpenDetailViewExecute()
         {
-            _eventAgregator.GetEvent<OpenFriendDetailViewEvent>().Publish(Id);
+            _eventAgregator.GetEvent<OpenDetailViewEvent>().Publish(
+                new OpenDetailViewEventArgs()
+                {
+                    Id = this.Id,
+                    ViewModelName = _detailViewModelName
+                }
+                );
         }
     }
 }
