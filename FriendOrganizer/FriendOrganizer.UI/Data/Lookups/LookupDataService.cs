@@ -11,7 +11,7 @@ namespace FriendOrganizer.UI.Data.Lookups
     /// <summary>
     /// 
     /// </summary>
-    public class LookupDataService : IProgrammingLanguageLookupDataService, ILookupDataServiceFriend
+    public class LookupDataService : IProgrammingLanguageLookupDataService, ILookupDataServiceFriend, IMeetingLookupDataService
     {
         private readonly Func<FriendOrganizerDbContext> _contextCreator;
 
@@ -45,6 +45,20 @@ namespace FriendOrganizer.UI.Data.Lookups
             using (var ctx = _contextCreator())
             {
                 return await ctx.ProgrammingLanguages.AsNoTracking().Select(f => new LookupItem { Id = f.Id, DisplayMember = f.Name }).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// Gets the meeting lookup asynchronous.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<LookupItem>> GetMeetingLookupAsync()
+        {
+            using (var ctx = _contextCreator())
+            {
+                var items = await ctx.Meetings.AsNoTracking()
+                    .Select(m => new LookupItem { Id = m.Id, DisplayMember = m.Title }).ToListAsync();
+                return items;
             }
         }
     }

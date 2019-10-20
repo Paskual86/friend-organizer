@@ -65,6 +65,10 @@
     <Compile Include="Migrations\201909082325442_AddedFriendPhoneNumber.Designer.cs">
       <DependentUpon>201909082325442_AddedFriendPhoneNumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910191056016_AddedMeeting.cs" />
+    <Compile Include="Migrations\201910191056016_AddedMeeting.Designer.cs">
+      <DependentUpon>201910191056016_AddedMeeting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -90,6 +94,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909082325442_AddedFriendPhoneNumber.resx">
       <DependentUpon>201909082325442_AddedFriendPhoneNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910191056016_AddedMeeting.resx">
+      <DependentUpon>201910191056016_AddedMeeting.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
