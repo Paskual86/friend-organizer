@@ -20,7 +20,7 @@ namespace FriendOrganizer.UI.ViewModel
         public ICommand CreateNewDetailCommand { get; }
         public INavigationViewModel NavigationViewModel { get; }
 
-        private readonly IIndex<string, IDetailViewModel> _detailViewModelCreator;
+        private IIndex<string, IDetailViewModel> _detailViewModelCreator;
 
         public ObservableCollection<IDetailViewModel> DetailViewModels { get; }
 
@@ -107,14 +107,19 @@ namespace FriendOrganizer.UI.ViewModel
                                     .SingleOrDefault(vm => vm.Id == args.Id 
                                                     && vm.GetType().Name == args.ViewModelName);
 
-            if(detailViewModel == null)
+            if (detailViewModel == null)
             {
                 detailViewModel = _detailViewModelCreator[args.ViewModelName];
                 await detailViewModel.LoadAsync(args.Id);
                 DetailViewModels.Add(detailViewModel);
+
+                SelectedDetailViewModel = detailViewModel;
             }
-            
-            SelectedDetailViewModel = _detailViewModelCreator[args.ViewModelName];
+            else
+            {
+
+                SelectedDetailViewModel = _detailViewModelCreator[args.ViewModelName];
+            }
         }
 
         /// <summary>
