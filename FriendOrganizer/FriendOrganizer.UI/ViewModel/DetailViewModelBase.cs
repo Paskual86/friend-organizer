@@ -122,11 +122,11 @@ namespace FriendOrganizer.UI.ViewModel
         /// <summary>
         /// Called when [close detail view execute].
         /// </summary>
-        protected virtual void OnCloseDetailViewExecute() 
+        protected async virtual void OnCloseDetailViewExecute() 
         {
             if (HasChanges)
             {
-                var result = MessageDialogService.ShowOkCancelDialog("You 've made changes. Close this Item?", "Question");
+                var result = await MessageDialogService.ShowOkCancelDialogAsync("You 've made changes. Close this Item?", "Question");
                 if (result == MessageDialogResult.Cancel)
                 {
                     return;
@@ -168,12 +168,12 @@ namespace FriendOrganizer.UI.ViewModel
                 var databaseValues = ex.Entries.Single().GetDatabaseValues();
                 if (databaseValues == null)
                 {
-                    MessageDialogService.ShowInfoDialog("The entity has been deleted by other user.");
+                    await MessageDialogService.ShowInfoDialogAsync("The entity has been deleted by other user.");
                     RaiseDetailDeletedEvent(Id);
                     return;
                 }
 
-                var result = MessageDialogService.ShowOkCancelDialog($"The entity has been changed in the meantime by someone else. Click Ok to save your changes anyway, click Cancel to reload the entity from the database.", "Question");
+                var result = await MessageDialogService.ShowOkCancelDialogAsync($"The entity has been changed in the meantime by someone else. Click Ok to save your changes anyway, click Cancel to reload the entity from the database.", "Question");
                 if (result == MessageDialogResult.OK)
                 {
                     // Update the original values 
