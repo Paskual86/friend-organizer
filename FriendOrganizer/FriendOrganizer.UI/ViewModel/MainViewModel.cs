@@ -18,6 +18,7 @@ namespace FriendOrganizer.UI.ViewModel
         private readonly IMessageDialogService _messageDialogService;
 
         public ICommand CreateNewDetailCommand { get; }
+        public ICommand OpenSingleDetailViewCommand { get; }
         public INavigationViewModel NavigationViewModel { get; }
 
         private IIndex<string, IDetailViewModel> _detailViewModelCreator;
@@ -50,8 +51,10 @@ namespace FriendOrganizer.UI.ViewModel
             _eventAggregator.GetEvent<OpenDetailViewEvent>().Subscribe(OnOpenDetailViewEvent);
             _eventAggregator.GetEvent<AfterDetailDeleteEvent>().Subscribe(OnAfterDetailDeleteEvent);
             _eventAggregator.GetEvent<AfterDetailClosedEvent>().Subscribe(OnAfterDetailCloseEvent);
+            
 
             CreateNewDetailCommand = new DelegateCommand<Type>(OnCreateNewDetailExecute);
+            OpenSingleDetailViewCommand = new DelegateCommand<Type>(OnOpenSingleDetailViewExecute);
         }
 
         /// <summary>
@@ -93,8 +96,24 @@ namespace FriendOrganizer.UI.ViewModel
         /// </summary>
         private void OnCreateNewDetailExecute(Type viewModelType)
         {
-            OnOpenDetailViewEvent(new OpenDetailViewEventArgs() { Id = nextNewItemId--, 
-                                                                ViewModelName = viewModelType.Name});
+            OnOpenDetailViewEvent(new OpenDetailViewEventArgs()
+            {
+                Id = nextNewItemId--,
+                ViewModelName = viewModelType.Name
+            });
+        }
+
+        /// <summary>
+        /// Called when [open single detail view execute].
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        private void OnOpenSingleDetailViewExecute(Type viewModelType)
+        {
+            OnOpenDetailViewEvent(new OpenDetailViewEventArgs()
+            {
+                Id = -1,
+                ViewModelName = viewModelType.Name
+            });
         }
 
         /// <summary>

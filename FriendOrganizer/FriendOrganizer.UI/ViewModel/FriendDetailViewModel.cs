@@ -1,6 +1,7 @@
 ﻿using FriendOrganizer.Model;
 using FriendOrganizer.UI.Data.Lookups;
 using FriendOrganizer.UI.Data.Repositories;
+using FriendOrganizer.UI.Event;
 using FriendOrganizer.UI.View.Services;
 using FriendOrganizer.UI.Wrapper;
 using Prism.Commands;
@@ -60,11 +61,25 @@ namespace FriendOrganizer.UI.ViewModel
         {
             _friendRepository = fds;
             _lookupDataServiceProgrammingLanguage = ldspl;
+
+            EventAggregator.GetEvent<AfterCollectionSaveEvent>().Subscribe(OnAfterCollectionSaveEvent);
             // Geenrate Event
             AddPhoneNumberCommand = new DelegateCommand(OnAddPhoneNumberExecute);
             RemovePhoneNumberCommand = new DelegateCommand(OnRemovePhoneNumberExecute, OnRemovePhoneNumberCanExecute);
             ProgrammingLanguages = new ObservableCollection<LookupItem>();
             PhoneNumbers = new ObservableCollection<FriendPhoneNumberWrapper>();
+        }
+
+        /// <summary>
+        /// Raises the <see cref="E:AfterCollectionSaveEvent" /> event.
+        /// </summary>
+        /// <param name="args">The <see cref="AfterCollectionSaveEventArgs"/> instance containing the event data.</param>
+        private async void OnAfterCollectionSaveEvent(AfterCollectionSaveEventArgs args)
+        {
+            if (args.ViewModelName == nameof(ProgrammingLanguageDetailViewModel))
+            {
+                await LoadProgrammingLanguageLookupAsync();
+            }
         }
 
         /// <summary>
