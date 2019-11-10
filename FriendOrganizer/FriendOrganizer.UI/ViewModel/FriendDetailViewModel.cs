@@ -246,10 +246,13 @@ namespace FriendOrganizer.UI.ViewModel
         /// </summary>
         protected override async void OnSaveExecute()
         {
-            await _friendRepository.SaveAsync();
-            HasChanges = _friendRepository.HasChanges();
-            Id = Friend.Id;
-            RaiseDetailSaveEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            await SaveWithOptimisticConcurrencyAsync(_friendRepository.SaveAsync, () =>
+
+            {
+                HasChanges = _friendRepository.HasChanges();
+                Id = Friend.Id;
+                RaiseDetailSaveEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            });
         }
 
         /// <summary>

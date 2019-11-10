@@ -2,6 +2,9 @@
 using FriendOrganizer.UI.View.Services;
 using Prism.Commands;
 using Prism.Events;
+using System;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -147,6 +150,46 @@ namespace FriendOrganizer.UI.ViewModel
                 {
                     ViewModelName = this.GetType().Name
                 });
+        }
+
+        /// <summary>
+        /// Saves the with optimistic concurrency asynchronous.
+        /// </summary>
+        /// <param name="funcSaveAsync">The function save asynchronous.</param>
+        /// <param name="actionPostSave">The action post save.</param>
+        protected async Task SaveWithOptimisticConcurrencyAsync(Func<Task> funcSaveAsync, Action actionPostSave)
+        {
+            try
+            {
+                await funcSaveAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var databaseValues = ex.Entries.Single().GetDatabaseValues();
+                if (databaseValues == null)
+                {
+                    MessageDialogService.ShowInfoDialog("The entity has been deleted by other user.");
+                    RaiseDetailDeletedEvent(Id);
+                    return;
+                }
+
+                var result = MessageDialogService.ShowOkCancelDialog($"The entity has been changed in the meantime by someone else. Click Ok to save your changes anyway, click Cancel to reload the entity from the database.", "Question");
+                if (result == MessageDialogResult.OK)
+                {
+                    // Update the original values 
+                    var entry = ex.Entries.Single();
+                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                    await funcSaveAsync();
+                }
+                else
+                {
+                    await ex.Entries.Single().ReloadAsync();
+                    await LoadAsync(Id);
+                }
+            }
+
+            actionPostSave();
+            
         }
     }
 }
